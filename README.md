@@ -1,5 +1,3 @@
-# goaldle
-
 ## Project setup
 ```
 npm install
