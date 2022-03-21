@@ -1,5 +1,7 @@
 <template>
-  <div class="header">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">   <div class="header">
     <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto;">
       <h3 style="margin-left: auto; cursor: pointer;" @click="showStatsModal()">Stats</h3>
       <h3 style="margin-right: auto; margin-left: 2rem; cursor: pointer;" @click="showHowTo()">How To Play</h3>
@@ -8,13 +10,11 @@
 
   <div v-if="showHowToPlay" class="modal">
     <p style="font-size: 25px">Guess the Mystery NFL Player!</p>
-    <p>You have 7 guesses to find the mystery outfield (no goalkeepers!) player of the day.</p>
+    <p>You have 7 guesses to find the NFL player of the day.</p>
     <p><span style="color: #37be75">GREEN:</span> If you get any of the players' attributes correct, the corresponding box will show as green.</p>
     <p><span style="color: #ffa64d">ORANGE:</span> If you get close to, but not quite the correct attribute, the box will show as orange. For example:</p>
-    <p style="margin: 4px;">- Age within 2 years</p>
-    <p style="margin: 4px;">- Nationality in the right continent but wrong country</p>
-    <p style="margin: 4px;">- One of the two Kit colours matches e.g. Claret & Blue is a partial match with Blue</p>
-    <p><span style="color: #878a8c">GREY:</span> If the attribute is completely wrong, then you’ll get greyed out.</p>
+    <p style="margin: 4px;">If the players position is wrong, but they do play on the offensive team.</p>
+    <p><span style="color: #878a8c">GREY:</span> If the attribute is completely wrong, then it will be greyed out.</p>
     <p>Good Luck!</p>
     <button @click="showHowTo()" class="button-43" role="button">Close</button>
   </div>
@@ -63,9 +63,7 @@
   </div>
 
   <div :class="[showHowToPlay || showStats ? 'modal-backdrop' : null, 'hello']">
-    <Game :show-how-to-play="this.showHowToPlay" />
-  </div>
-    <div class="footer">
+    <Game :show-how-to-play="this.showHowToPlay || this.showStats" />
   </div>
 </template>
 
@@ -147,18 +145,12 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap")
 @font-face {
-  font-family: "Radikal";
-  src: local("Radikal"),
-    url(./fonts/nootype_radikal_medium.otf) format("truetype")
+  font-family: "Roboto";
 }
 #app {
-  font-family: "Radikal";
-  src: local("Radikal"),
-    url(./fonts/nootype_radikal_medium.otf) format("truetype");
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Roboto";
   text-align: center;
   color: #2c3e50;
 }
@@ -186,7 +178,9 @@ export default {
 }
 .header {
   width: 100%;
-  background: #3AAFA9;
+  background: #fff;
+  border: 1px solid black;
+  opacity: 50;
 }
 .footer {
   position: fixed;

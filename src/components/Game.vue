@@ -7,11 +7,15 @@
       <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
       <div :class="[divisionCorrect(guess.division) ? 'correct' :  'incorrect', 'cell cell-border cell-border-top cell-spin-4']"></div>
       <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']"></div>
-      <div :class="[positionCorrect(guess.position) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']"></div>
+      <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']"></div>
       <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']"></div>
     </div>
     <div id="gameResultsShared" v-for="guess in guesses" v-bind:key="guess.id">
     </div>
+
+    <div style="margin-top: 1rem">Next Player in:</div>
+    <div id="nextPlayerTime" style="font-size: 30px"></div>
+    
     <div style="display: flex; flex-direction: row; margin-top: 1rem;">
       <button @click="copyToClipboard()" id="copybtn" class="button-43" role="button">Share</button>
       <button @click="closeShowWon()" class="button-43" role="button">Close</button>
@@ -22,6 +26,10 @@
     <p style="font-size: 20px">Better luck next time!</p>
     <p>The mystery players name was:</p>
     <p>{{ this.mysteryPlayer.full_name }}</p>
+
+    <div style="margin-top: 1rem">Next Player in:</div>
+    <div id="nextPlayerTime" style="font-size: 30px"></div>
+
     <button @click="closeShowLost()" class="button-43" role="button">Close</button>
   </div>
 
@@ -50,7 +58,7 @@
         <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']">{{ guess.conference }}</div>
         <div :class="[divisionCorrect(guess.division) ? 'correct' :  'incorrect', 'cell cell-border cell-border-top cell-spin-4']">{{ guess.division }}</div>
         <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']">{{ guess.team }}</div>
-        <div :class="[positionCorrect(guess.position) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.position }}</div>
+        <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.position }}</div>
         <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']">{{ guess.age }}</div>
       </div>
     </div>
@@ -59,6 +67,7 @@
 
 <script>
 import playerDatabaseFile from "../assets/nfl_players.csv"
+import moment from 'moment'
 
 export default {
   name: 'PlayGame',
@@ -108,6 +117,23 @@ export default {
       }
       this.gameFinished = true
     }
+
+    const $this = this;
+    setInterval(function() {
+        if ($this.showHowToPlay) {
+          $this.showWon = false
+          $this.showLost = false
+        }
+
+      let timeNow = moment()
+      let eventTime = moment().endOf('day')
+      let timeDiff = moment.utc(eventTime.diff(timeNow)).format("hh:mm:ss")
+  
+      let el = document.getElementById("nextPlayerTime")
+      if (el) {
+        el.innerHTML = timeDiff
+      }
+    }, 1000)
   },
   computed: {
     filteredPlayers() {
@@ -172,6 +198,19 @@ export default {
     positionCorrect(positionGuess) {
       return positionGuess == this.mysteryPlayer.position
     },
+    positionClose(positionGuess) {
+      let offense = ["WR", "RB", "TE", "QB"]
+      let defense = ["LB"]
+      let special = ["KICK"]
+      let position = this.mysteryPlayer.position
+      if(offense.includes(position)) {
+        return offense.includes(positionGuess)
+      } else if (defense.includes(position)) {
+        return defense.includes(positionGuess)
+      } else if (special.includes(position)) {
+        return special.includes(positionGuess)
+      }
+    },
     ageCorrect(ageGuess) {
       return ageGuess == this.mysteryPlayer.age
     },
@@ -192,23 +231,28 @@ export default {
     copyToClipboard() {
       const ms_per_day = 24 * 60 * 60 * 1000
       let days_since_epoch = Math.floor((new Date()).getTime() / ms_per_day)
-      let str = `Nfldle ${days_since_epoch - 19060} ${7-this.turnsLeft}/7 \n\n`
+      let str = `Nfldle ${days_since_epoch - 19071} ${7-this.turnsLeft}/7 \n\n`
       var guesses = this.guesses
       // let results = document.getElementById("gameResults")
       for(var i = 0; i<this.guesses.length; i++) {
-        if (this.clubCorrect(guesses[i].current_club)) {
+        if (this.conferenceCorrect(guesses[i].conference)) {
           str += "🟩" 
+        } else {
+          str += "⬜"
+        }
+        if (this.divisionCorrect(guesses[i].division)) {
+          str += "🟩" 
+        } else {
+          str += "⬜"
+        }
+        if (this.teamCorrect(guesses[i].team)) {
+          str += "🟩"
         } else {
           str += "⬜"
         }
         if (this.positionCorrect(guesses[i].position)) {
-          str += "🟩" 
-        } else {
-          str += "⬜"
-        }
-        if (this.countryCorrect(guesses[i].nationality)) {
           str += "🟩"
-        } else if (this.continentCorrect(guesses[i].continent)) {
+        } else if (this.positionClose(guesses[i].position)) {
           str += "🟨"
         } else {
           str += "⬜"
@@ -216,13 +260,6 @@ export default {
         if (this.ageCorrect(guesses[i].age)) {
           str += "🟩"
         } else if (this.ageClose(guesses[i].age)) {
-          str += "🟨"
-        } else {
-          str += "⬜"
-        }
-        if (this.colourCorrect(guesses[i].kit_colour)) {
-          str += "🟩"
-        } else if (this.colourHalfCorrect(guesses[i].kit_colour)) {
           str += "🟨"
         } else {
           str += "⬜"
