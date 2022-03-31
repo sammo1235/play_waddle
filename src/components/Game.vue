@@ -34,8 +34,8 @@
   </div>
 
   <div :class="[showWon || showLost ? 'modal-backdrop' : null, 'hello']">
-    <h1>NFLdle</h1>
-    <h2>NFL player guessing game</h2>
+    <h1>WADDLE</h1>
+    <h2>A DAILY NFL PLAYER GUESSING GAME</h2>
 
     <div class="search">
       <input type="text" class="search-input" v-model="search" placeholder="Guess a player" :disabled="gameFinished || showWon || showLost || showHowToPlay" />
@@ -55,9 +55,13 @@
       </div>
       <div class="wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
         <div class="cell cell-border name cell-border-top cell-spin-1">{{ guess.full_name }}</div>
-        <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']">{{ guess.conference }}</div>
+        <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']">
+          <img style="height: 50px; width: 50px;" v-bind:src="'https://drive.google.com/uc?export=view&id=' + conferenceImage(guess.conference)" />
+        </div>
         <div :class="[divisionCorrect(guess.division) ? 'correct' :  'incorrect', 'cell cell-border cell-border-top cell-spin-4']">{{ guess.division }}</div>
-        <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']">{{ guess.team }}</div>
+        <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']">
+          <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/teams/' + guess.team + '.png')" />
+        </div>
         <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.position }}</div>
         <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']">{{ guess.age }}</div>
       </div>
@@ -227,6 +231,14 @@ export default {
     },
     closeShowLost() {
       this.showLost = false
+    },
+    conferenceImage(conferenceGuess) {
+      let images = {
+        "AFC": "1vjUXV5HQGzAuntFblmb4sTKUsOrzkdXh",
+        "NFC": "1sdaf6vN_W-vwnHKtSDI1v7VURs3FJi6-",
+      }
+
+      return images[conferenceGuess]
     },
     copyToClipboard() {
       const ms_per_day = 24 * 60 * 60 * 1000
@@ -468,6 +480,7 @@ a {
 }
 .cell {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-inline: 1.5rem;
@@ -534,7 +547,7 @@ a {
   color: #FEFFFF
 }
 .close {
-  background: #ffa64d;
+  background: #fad91e;
   color: #FEFFFF
 }
 </style>

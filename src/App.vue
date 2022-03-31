@@ -4,18 +4,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">   <div class="header">
     <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto;">
       <h3 style="margin-left: auto; cursor: pointer;" @click="showStatsModal()">Stats</h3>
-      <h3 style="margin-right: auto; margin-left: 2rem; cursor: pointer;" @click="showHowTo()">How To Play</h3>
+      <h3 style="margin-left: 2rem; cursor: pointer;" @click="showHowTo()">How To Play</h3>
+      <h3 style="margin-right: auto; margin-left: 2rem; cursor: pointer;">
+        <a href="https://twitter.com/intent/tweet?screen_name=playwaddle&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false"></a>
+      </h3>
     </div>
   </div>
 
   <div v-if="showHowToPlay" class="modal">
-    <p style="font-size: 25px">Guess the Mystery NFL Player!</p>
-    <p>You have 7 guesses to find the NFL player of the day.</p>
-    <p><span style="color: #37be75">GREEN:</span> If you get any of the players' attributes correct, the corresponding box will show as green.</p>
-    <p><span style="color: #ffa64d">ORANGE:</span> If you get close to, but not quite the correct attribute, the box will show as orange. For example:</p>
-    <p style="margin: 4px;">If the players position is wrong, but they do play on the offensive team.</p>
-    <p><span style="color: #878a8c">GREY:</span> If the attribute is completely wrong, then it will be greyed out.</p>
-    <p>Good Luck!</p>
+    <p style="font-size: 25px">How to play</p>
+    <p>You get 7 guesses to identify the mystery NFL player!</p>
+    <p><span style="color: #37be75">GREEN:</span> In any field means the you guessed the corresponding attribute correctly.</p>
+    <p><span style="color: #ffa64d">YELLOW:</span> In the position field means that the mystery player does play on that side of the ball, but at a different position.</p>
+    <p><span style="color: #ffa64d">YELLOW:</span> In the age field means that you guessed within 2 years of the mystery player's age.</p>
+    <p>The player pool includes the following positions:</p>
+    <p>Offense: QB, RB, WR, TE, K</p>
+    <p>Defense: DL, LB, DB</p>
+    <p>Enjoy a new mystery player every day!</p>
     <button @click="showHowTo()" class="button-43" role="button">Close</button>
   </div>
 
@@ -86,7 +91,12 @@ export default {
       this.$store.commit('seenTutorial')
     }
     // Title
-    document.title = "NFLdle"
+    document.title = "Waddle"
+
+    // twitter script
+    let Script = document.createElement("script");
+    Script.setAttribute("src", "https://platform.twitter.com/widgets.js");
+    document.body.appendChild(Script);
   },
   computed: {
     totalGamesPlayed() {
