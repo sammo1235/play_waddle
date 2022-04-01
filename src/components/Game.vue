@@ -1,8 +1,10 @@
 <template>
   <div v-if="showWon" class="modal">
-    <p style="font-size: 35px">Well done!</p>
+    <p style="font-size: 35px; margin: 2px">Well done!</p>
     <p>You guessed the mystery player in {{ 7 - this.turnsLeft }} {{ (7 - this.turnsLeft) > 1 ? 'turns' : 'turn' }}.</p>
-    <p>{{ this.mysteryPlayer.full_name }}</p>
+    <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.full_name }}</p>
+    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replace(' ', '_') + '.webp')" />
+
     <div id="gameResults" class="mini-wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
       <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
       <div :class="[divisionCorrect(guess.division) ? 'correct' :  'incorrect', 'cell cell-border cell-border-top cell-spin-4']"></div>
@@ -56,7 +58,7 @@
       <div class="wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
         <div class="cell cell-border name cell-border-top cell-spin-1">{{ guess.full_name }}</div>
         <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']">
-          <img style="height: 50px; width: 50px;" v-bind:src="'https://drive.google.com/uc?export=view&id=' + conferenceImage(guess.conference)" />
+          <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/conferences/' + guess.conference + '.png')" />
         </div>
         <div :class="[divisionCorrect(guess.division) ? 'correct' :  'incorrect', 'cell cell-border cell-border-top cell-spin-4']">{{ guess.division }}</div>
         <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']">
@@ -93,6 +95,7 @@ export default {
     }
   },
   created() {
+    // https://drive.google.com/uc?export=view&id= FOR DRIVE IMAGE FETCH
     this.playerDatabase = playerDatabaseFile
 
     // new player per day
@@ -280,7 +283,7 @@ export default {
       }
 
       str += "\n\nPlay here:\n"
-      str += "https://replace_me.com"
+      str += "https://playwaddle.com"
 
 
       function copyRichText(text) {

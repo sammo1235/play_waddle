@@ -1,7 +1,9 @@
 <template>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">   <div class="header">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Roboto:wght@100;300&display=swap" rel="stylesheet"> 
+
+  <div class="header">
     <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto;">
       <h3 style="margin-left: auto; cursor: pointer;" @click="showStatsModal()">Stats</h3>
       <h3 style="margin-left: 2rem; cursor: pointer;" @click="showHowTo()">How To Play</h3>
@@ -14,7 +16,7 @@
   <div v-if="showHowToPlay" class="modal">
     <p style="font-size: 25px">How to play</p>
     <p>You get 7 guesses to identify the mystery NFL player!</p>
-    <p><span style="color: #37be75">GREEN:</span> In any field means the you guessed the corresponding attribute correctly.</p>
+    <p><span style="color: #37be75">GREEN:</span> In any field means that you guessed the corresponding attribute correctly.</p>
     <p><span style="color: #ffa64d">YELLOW:</span> In the position field means that the mystery player does play on that side of the ball, but at a different position.</p>
     <p><span style="color: #ffa64d">YELLOW:</span> In the age field means that you guessed within 2 years of the mystery player's age.</p>
     <p>The player pool includes the following positions:</p>
@@ -155,12 +157,12 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap")
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Roboto:wght@100;300&display=swap');
 @font-face {
-  font-family: "Roboto";
+  font-family: "Roboto Slab";
 }
 #app {
-  font-family: "Roboto";
+  font-family: "Roboto Slab";
   text-align: center;
   color: #2c3e50;
 }
