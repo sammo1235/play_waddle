@@ -3,7 +3,7 @@
     <p style="font-size: 35px; margin: 2px">Well done!</p>
     <p>You guessed the mystery player in {{ 7 - this.turnsLeft }} {{ (7 - this.turnsLeft) > 1 ? 'turns' : 'turn' }}.</p>
     <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.full_name }}</p>
-    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replace(' ', '_') + '.webp')" />
+    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replaceAll(' ', '_') + '.webp')" />
 
     <div id="gameResults" class="mini-wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
       <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
@@ -206,16 +206,13 @@ export default {
       return positionGuess == this.mysteryPlayer.position
     },
     positionClose(positionGuess) {
-      let offense = ["WR", "RB", "TE", "QB"]
-      let defense = ["LB"]
-      let special = ["KICK"]
+      let offense = ["WR", "RB", "TE", "QB", "K"]
+      let defense = ["LB", "DL", "DB"]
       let position = this.mysteryPlayer.position
       if(offense.includes(position)) {
         return offense.includes(positionGuess)
       } else if (defense.includes(position)) {
         return defense.includes(positionGuess)
-      } else if (special.includes(position)) {
-        return special.includes(positionGuess)
       }
     },
     ageCorrect(ageGuess) {
@@ -235,18 +232,10 @@ export default {
     closeShowLost() {
       this.showLost = false
     },
-    conferenceImage(conferenceGuess) {
-      let images = {
-        "AFC": "1vjUXV5HQGzAuntFblmb4sTKUsOrzkdXh",
-        "NFC": "1sdaf6vN_W-vwnHKtSDI1v7VURs3FJi6-",
-      }
-
-      return images[conferenceGuess]
-    },
     copyToClipboard() {
       const ms_per_day = 24 * 60 * 60 * 1000
       let days_since_epoch = Math.floor((new Date()).getTime() / ms_per_day)
-      let str = `Nfldle ${days_since_epoch - 19071} ${7-this.turnsLeft}/7 \n\n`
+      let str = `Waddle ${days_since_epoch - 19071} ${7-this.turnsLeft}/7 \n\n`
       var guesses = this.guesses
       // let results = document.getElementById("gameResults")
       for(var i = 0; i<this.guesses.length; i++) {
@@ -350,6 +339,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1 {
+  font-weight: 'bold';
+  color: #288708;
   font-size: 30px;
   margin-bottom: 1rem;
 }
