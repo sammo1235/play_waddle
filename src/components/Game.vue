@@ -7,7 +7,7 @@
 
     <div id="gameResults" class="mini-wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
       <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
-      <div :class="[divisionCorrect(guess.division) ? 'correct' :  'incorrect', 'cell cell-border cell-border-top cell-spin-4']"></div>
+      <div :class="[divisionCorrect(guess.division) ? 'correct' : divisionClose(guess.division) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-4']"></div>
       <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']"></div>
       <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']"></div>
       <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']"></div>
@@ -60,12 +60,20 @@
         <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']">
           <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/conferences/' + guess.conference + '.png')" />
         </div>
-        <div :class="[divisionCorrect(guess.division) ? 'correct' :  'incorrect', 'cell cell-border cell-border-top cell-spin-4']">{{ guess.division }}</div>
+        <div :class="[divisionCorrect(guess.division) ? 'correct' : divisionClose(guess.division) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-4']">{{ guess.division }}</div>
         <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']">
           <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/teams/' + guess.team + '.png')" />
         </div>
         <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.position }}</div>
-        <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']">{{ guess.age }}</div>
+        <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']" style="flex-direction: row">
+          {{ guess.age }}
+          <svg v-if="ageClose(guess.age) && guess.age > this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+          </svg>
+          <svg v-if="ageClose(guess.age) && guess.age < this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -198,6 +206,9 @@ export default {
     },
     divisionCorrect(divisionGuess) {
       return divisionGuess == this.mysteryPlayer.division
+    },
+    divisionClose(divisionGuess) {
+      return this.mysteryPlayer.conference == divisionGuess.split(" ")[0]
     },
     teamCorrect(teamGuess) {
       return teamGuess == this.mysteryPlayer.team
@@ -479,7 +490,7 @@ a {
   justify-content: center;
   padding-inline: 1.5rem;
   padding: 1rem;
-  font-size: 10px;
+  font-size: 14px;
 }
 @media only screen and (min-width: 600px) {
   .cell {

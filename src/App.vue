@@ -166,6 +166,19 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+h3 {
+  font-size: 14px;
+}
+@media only screen and (min-width: 600px) {
+  h3 {
+    font-size: 18px;
+  }
+}
+@media only screen and (min-width: 1000px) {
+  h3 {
+    font-size: 20px;
+  }
+}
 .modal-backdrop {
   opacity: 0.5 !important;
 }
