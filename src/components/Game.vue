@@ -257,6 +257,8 @@ export default {
         }
         if (this.divisionCorrect(guesses[i].division)) {
           str += "🟩" 
+        } else if (this.divisionClose(guesses[i].division)) {
+          str += "🟨"
         } else {
           str += "⬜"
         }
@@ -283,7 +285,7 @@ export default {
       }
 
       str += "\n\nPlay here:\n"
-      str += "https://playwaddle.com"
+      str += "https://www.playwaddle.com"
 
 
       function copyRichText(text) {
