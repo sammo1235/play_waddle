@@ -26,8 +26,10 @@
 
   <div v-if="showLost" class="modal">
     <p style="font-size: 20px">Better luck next time!</p>
-    <p>The mystery players name was:</p>
-    <p>{{ this.mysteryPlayer.full_name }}</p>
+    <p>The mystery player was:</p>
+    <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.full_name }}</p>
+    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replaceAll(' ', '_') + '.webp')" />
+
 
     <div style="margin-top: 1rem">Next Player in:</div>
     <div id="nextPlayerTime" style="font-size: 30px"></div>
