@@ -3,7 +3,7 @@
     <p style="font-size: 35px; margin: 2px">Well done!</p>
     <p>You guessed the mystery player in {{ 7 - this.turnsLeft }} {{ (7 - this.turnsLeft) > 1 ? 'turns' : 'turn' }}.</p>
     <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.full_name }}</p>
-    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replaceAll(' ', '_') + '.webp')" alt="" />
+    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " :src="getImageSrc()" />
 
     <div id="gameResults" class="mini-wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
       <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
@@ -107,7 +107,7 @@ export default {
   created() {
     // this.playerDatabase = playerDatabaseFile
 
-    const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vShU28PjmKyL0VTOXpO9k7Z1h4h17Gq1DY8Qj760XFIxUcSovZ87xerf65X-q2EzwikrVtB-XWwISZm/pub?gid=457392527&single=true&output=csv", {
+    const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQeQRhkjJqtjY4fBJLYh5iXCdPY_0jCRhYk3xY2nIUla7Fu1b7kj6AOBybf_t_UM8gLHMgtdY6YMfwP/pub?gid=1231767422&single=true&output=csv", {
       method: 'get',
       headers: {
         'content-type': 'text/csv;charset=UTF-8'
@@ -120,7 +120,7 @@ export default {
     const getPlayerDatabase = () => {
       response.then((response) => {
         window.data = response;
-        console.log(response)
+        // console.log(response)
         this.playerDatabase = response
       })
     }
@@ -138,7 +138,7 @@ export default {
         let player_index = days_since_epoch % $this.playerDatabase.length
         $this.mysteryPlayer = $this.playerDatabase[player_index]
     
-        // console.log("mysteryPlayer: ", $this.mysteryPlayer.full_name)//, this.mysteryPlayer.conference, this.mysteryPlayer.division, this.mysteryPlayer.team, this.mysteryPlayer.position, this.mysteryPlayer.age)
+        // console.log("mysteryPlayer: ", $this.mysteryPlayer.full_name, $this.mysteryPlayer.age)//, this.mysteryPlayer.conference, this.mysteryPlayer.division, this.mysteryPlayer.team, this.mysteryPlayer.position, this.mysteryPlayer.age)
       } else {
         setTimeout(waitForDatabase, 150)
       }
@@ -298,6 +298,9 @@ export default {
     },
     closeShowLost() {
       this.showLost = false
+    },
+    getImageSrc() {
+      return "https://drive.google.com/uc?export=view&id=" + this.mysteryPlayer.image
     },
     copyToClipboard() {
       const ms_per_day = 24 * 60 * 60 * 1000
