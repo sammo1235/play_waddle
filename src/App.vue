@@ -5,7 +5,8 @@
 
   <div class="header">
     <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto;">
-      <h3 style="margin-left: auto; cursor: pointer;" @click="showStatsModal()">Stats</h3>
+      <h3 style="margin-left: auto; cursor: pointer;" @click="showAboutModal()">About</h3>
+      <h3 style="margin-left: 2rem; cursor: pointer;" @click="showStatsModal()">Stats</h3>
       <h3 style="margin-left: 2rem; cursor: pointer;" @click="showHowTo()">How To Play</h3>
       <h3 style="margin-right: auto; margin-left: 2rem; cursor: pointer;">
         <a href="https://twitter.com/intent/tweet?screen_name=playwaddle&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false"></a>
@@ -17,13 +18,23 @@
     <p style="font-size: 25px">How to play</p>
     <p>You get 7 guesses to identify the mystery NFL player!</p>
     <p><span style="color: #37be75">GREEN:</span> In any field means that you guessed the corresponding attribute correctly.</p>
+    <p><span style="color: #ffa64d">YELLOW:</span> In the division field means that the mystery player plays in that conference, but in a different division.</p>
     <p><span style="color: #ffa64d">YELLOW:</span> In the position field means that the mystery player does play on that side of the ball, but at a different position.</p>
     <p><span style="color: #ffa64d">YELLOW:</span> In the age field means that you guessed within 2 years of the mystery player's age.</p>
+    <p>Enjoy a new mystery player every day!</p>
+    <p>Copyright 2022. All Rights Reserved.</p>
+    <button @click="showHowTo()" class="button-43" role="button">Close</button>
+  </div>
+
+  <div v-if="showAbout" class="modal">
+    <p style="font-size: 25px">About WADDLE:</p>
+    <p>Each mystery player is semi-randomly picked from the top fantasy football players (including IDPs).</p>
+    <p>Much love and all relevant rights to everyone featured.</p>
     <p>The player pool includes the following positions:</p>
     <p>Offense: QB, RB, WR, TE, K</p>
     <p>Defense: DL, LB, DB</p>
-    <p>Enjoy a new mystery player every day!</p>
-    <button @click="showHowTo()" class="button-43" role="button">Close</button>
+    <p>A special shout out to <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a>, who put down the first idea lego.</p>
+    <button @click="showAboutModal()" class="button-43" role="button">Close</button>
   </div>
 
   <div v-if="showStats" class="modal">
@@ -70,7 +81,7 @@
   </div>
 
   <div :class="[showHowToPlay || showStats ? 'modal-backdrop' : null, 'hello']">
-    <Game :show-how-to-play="this.showHowToPlay || this.showStats" />
+    <Game :show-how-to-play="this.showHowToPlay || this.showStats || this.showAbout" />
   </div>
 </template>
 
@@ -84,7 +95,8 @@ export default {
   data() {
     return {
       showHowToPlay: false,
-      showStats: false
+      showStats: false,
+      showAbout: false
     }
   },
   created() {
@@ -119,12 +131,19 @@ export default {
   },
   methods: {
     showHowTo() {
-      this.showStats = false
+      this.showStats = false;
+      this.showAbout = false;
       this.showHowToPlay = !this.showHowToPlay
     },
     showStatsModal() {
       this.showHowToPlay = false
+      this.showAbout = false
       this.showStats = !this.showStats
+    },
+    showAboutModal() {
+      this.showStats = false;
+      this.showHowToPlay = false
+      this.showAbout = !this.showAbout
     },
     guessedIn(turnsTaken) {
       let results = this.$store.getters.getResultsHistory   

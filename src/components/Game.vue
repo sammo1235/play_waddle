@@ -1,9 +1,9 @@
 <template>
-  <div v-if="showWon" class="modal">
+  <div v-if="showWon && this.mysteryPlayer" class="modal">
     <p style="font-size: 35px; margin: 2px">Well done!</p>
     <p>You guessed the mystery player in {{ 7 - this.turnsLeft }} {{ (7 - this.turnsLeft) > 1 ? 'turns' : 'turn' }}.</p>
     <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.full_name }}</p>
-    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replaceAll(' ', '_') + '.webp')" />
+    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replaceAll(' ', '_') + '.webp')" alt="" />
 
     <div id="gameResults" class="mini-wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
       <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
@@ -48,7 +48,7 @@
       </ul>
     </div>
 
-    <div style="margin-top: 7rem; margin-bottom: 8rem;">
+    <div v-if="this.mysteryPlayer" style="margin-top: 7rem; margin-bottom: 8rem;">
       <div :class="[this.turnsLeft > 6 ? 'hide' : 'wrapper']" style="row-gap: 20px;">
         <div class="title-cell"></div>
         <div class="title-cell">Conference</div>
@@ -69,10 +69,10 @@
         <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.position }}</div>
         <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']" style="flex-direction: row">
           {{ guess.age }}
-          <svg v-if="ageClose(guess.age) && guess.age > this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg v-if="guess.age > this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
           </svg>
-          <svg v-if="ageClose(guess.age) && guess.age < this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg v-if="guess.age < this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
           </svg>
         </div>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import playerDatabaseFile from "../assets/nfl_players.csv"
+// import playerDatabaseFile from "../assets/nfl_players.csv"
 import moment from 'moment'
 
 export default {
@@ -105,17 +105,46 @@ export default {
     }
   },
   created() {
-    // https://drive.google.com/uc?export=view&id= FOR DRIVE IMAGE FETCH
-    this.playerDatabase = playerDatabaseFile
+    // this.playerDatabase = playerDatabaseFile
+
+    const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vShU28PjmKyL0VTOXpO9k7Z1h4h17Gq1DY8Qj760XFIxUcSovZ87xerf65X-q2EzwikrVtB-XWwISZm/pub?gid=457392527&single=true&output=csv", {
+      method: 'get',
+      headers: {
+        'content-type': 'text/csv;charset=UTF-8'
+      }
+    }).then((response) => response.text())
+    .then((text) => {
+      return this.csvToArray(text)
+    })
+
+    const getPlayerDatabase = () => {
+      response.then((response) => {
+        window.data = response;
+        console.log(response)
+        this.playerDatabase = response
+      })
+    }
+    
+    getPlayerDatabase()
+
+    // window.data = players
+    const $this = this;
 
     // new player per day
-    const ms_per_day = 24 * 60 * 60 * 1000
-    let days_since_epoch = Math.floor((new Date()).getTime() / ms_per_day)
-    let player_index = days_since_epoch % this.playerDatabase.length
+    function waitForDatabase() {
+      if ($this.playerDatabase != null) {
+        const ms_per_day = 24 * 60 * 60 * 1000
+        let days_since_epoch = Math.floor((new Date()).getTime() / ms_per_day)
+        let player_index = days_since_epoch % $this.playerDatabase.length
+        $this.mysteryPlayer = $this.playerDatabase[player_index]
+    
+        // console.log("mysteryPlayer: ", $this.mysteryPlayer.full_name)//, this.mysteryPlayer.conference, this.mysteryPlayer.division, this.mysteryPlayer.team, this.mysteryPlayer.position, this.mysteryPlayer.age)
+      } else {
+        setTimeout(waitForDatabase, 150)
+      }
+    }
 
-    this.mysteryPlayer = this.playerDatabase[player_index]
-
-    console.log("mysteryPlayer: ", this.mysteryPlayer.full_name, this.mysteryPlayer.conference, this.mysteryPlayer.division, this.mysteryPlayer.team, this.mysteryPlayer.position, this.mysteryPlayer.age)
+    waitForDatabase()
     // fill current day guesses if present
     let guesses = this.$store.getters.getGuesses
     if (guesses) {
@@ -135,7 +164,6 @@ export default {
       this.gameFinished = true
     }
 
-    const $this = this;
     setInterval(function() {
         if ($this.showHowToPlay) {
           $this.showWon = false
@@ -183,6 +211,32 @@ export default {
     }
   },
   methods: {
+      csvToArray(str, delimiter = ",") {
+        // slice from start of text to the first \n index
+        // use split to create an array from string by delimiter
+        const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
+
+        // slice from \n index + 1 to the end of the text
+        // use split to create an array of each csv value row
+        const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+
+        // Map the rows
+        // split values from each row into an array
+        // use headers.reduce to create an object
+        // object properties derived from headers:values
+        // the object passed as an element of the array
+        const arr = rows.map(function (row) {
+          const values = row.split(delimiter);
+          const el = headers.reduce(function (object, header, index) {
+            object[header] = values[index];
+            return object;
+          }, {});
+          return el;
+        });
+
+        // return the array
+        return arr;
+    },
     guessPlayer(guessedName) {
       let player = this.playerDatabase.find(player => 
         player.full_name.toLowerCase() == guessedName.toLowerCase()
