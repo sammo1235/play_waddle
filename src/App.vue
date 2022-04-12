@@ -10,14 +10,18 @@
       </div>
       <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
         <h3 style="" @click="showStatsModal()">Stats</h3>
-        <svg style="margin-left: 6px; margin-top: auto; margin-bottom: auto; color: #2c3e50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7"/><path d="M15 7h6v6"/></svg>
+        <svg style="margin-left: 6px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7"/><path d="M15 7h6v6"/></svg>
       </div>
       <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
         <h3 style="" @click="showHowTo()">How To Play</h3>
       </div>
-      <h3 style="margin-right: auto; margin-left: 2rem; cursor: pointer;">
-        <a href="https://twitter.com/intent/tweet?text=Play%20WADDLE&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false"></a>
-      </h3>
+      <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
+        <h3 style="" @click="showSupportModal()">Support</h3>
+        <svg style="margin-left: 6px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </div>
+      <div style="display: flex; align-items: center; margin-left: 2rem; margin-right: auto; cursor: pointer;">
+          <a href="https://twitter.com/intent/tweet?text=Play%20WADDLE&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false"></a>
+      </div>
     </div>
   </div>
 
@@ -44,6 +48,14 @@
     <p>Enjoy! 👊</p>
     <a href="https://docs.google.com/document/d/10QWWaZ9N590j0_J2_FIdfdIX5pQO4Wmskud4_C5bk3w/edit?usp=sharing">Privacy Policy</a>
     <button @click="showAboutModal()" class="button-43" role="button">Close</button>
+  </div>
+
+  <div v-if="showSupport" class="modal">
+    <p style="font-size: 25px">Support</p>
+    <p>If you've enjoyed playing Waddle, please consider supporting the
+    <a href="https://donate.redcrossredcrescent.org/ua/donate/~my-donation">Ukranian Red Cross</a>
+    , any amount will help and they could use the support right now. Thank you 🙏</p>
+    <button @click="showSupportModal()" class="button-43" role="button">Close</button>
   </div>
 
   <div v-if="showStats" class="modal">
@@ -90,7 +102,7 @@
   </div>
 
   <div :class="[showHowToPlay || showStats ? 'modal-backdrop' : null, 'hello']">
-    <Game :show-how-to-play="this.showHowToPlay || this.showStats || this.showAbout" />
+    <Game :show-how-to-play="this.showHowToPlay || this.showStats || this.showAbout || this.showSupport" />
   </div>
 </template>
 
@@ -105,7 +117,8 @@ export default {
     return {
       showHowToPlay: false,
       showStats: false,
-      showAbout: false
+      showAbout: false,
+      showSupport: false,
     }
   },
   created() {
@@ -142,17 +155,26 @@ export default {
     showHowTo() {
       this.showStats = false;
       this.showAbout = false;
+      this.showSupport = false;
       this.showHowToPlay = !this.showHowToPlay
     },
     showStatsModal() {
       this.showHowToPlay = false
-      this.showAbout = false
+      this.showAbout = false;
+      this.showSupport = false;
       this.showStats = !this.showStats
     },
     showAboutModal() {
       this.showStats = false;
-      this.showHowToPlay = false
+      this.showHowToPlay = false;
+      this.showSupport = false;
       this.showAbout = !this.showAbout
+    },
+    showSupportModal() {
+      this.showStats = false;
+      this.showHowToPlay = false;
+      this.showAbout = false;
+      this.showSupport = !this.showSupport
     },
     guessedIn(turnsTaken) {
       let results = this.$store.getters.getResultsHistory   
@@ -193,6 +215,12 @@ export default {
   font-family: "Roboto Slab";
   text-align: center;
   color: #2c3e50;
+}
+a {
+  color: #288708;
+}
+a:visited {
+  color: #288900;
 }
 h3 {
   font-size: 12px;
