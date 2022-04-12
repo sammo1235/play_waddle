@@ -4,19 +4,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Roboto:wght@100;300&display=swap" rel="stylesheet"> 
 
   <div class="header">
-    <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto;">
-      <div style="display: flex; align-items: center; margin-left: auto; cursor: pointer;">
-        <h3 style="" @click="showAboutModal()">About</h3>
+    <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto; padding: 1rem;">
+      <div @click="showAboutModal()" style="display: flex; align-items: center; margin-left: auto; cursor: pointer;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
       </div>
-      <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
-        <h3 style="" @click="showStatsModal()">Stats</h3>
+      <div @click="showStatsModal()" style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
         <svg style="margin-left: 6px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7"/><path d="M15 7h6v6"/></svg>
       </div>
-      <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
-        <h3 style="" @click="showHowTo()">How To Play</h3>
+      <div @click="showHowTo()" style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
       </div>
-      <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
-        <h3 style="" @click="showSupportModal()">Support</h3>
+      <div @click="showSupportModal()" style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
         <svg style="margin-left: 6px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
       </div>
       <div style="display: flex; align-items: center; margin-left: 2rem; margin-right: auto; cursor: pointer;">

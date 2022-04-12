@@ -136,6 +136,7 @@ export default {
         const ms_per_day = 24 * 60 * 60 * 1000
         let days_since_epoch = Math.floor((new Date()).getTime() / ms_per_day)
         let player_index = days_since_epoch % $this.playerDatabase.length
+        // console.log(player_index)
         $this.mysteryPlayer = $this.playerDatabase[player_index]
     
         // console.log("mysteryPlayer: ", $this.mysteryPlayer.full_name, $this.mysteryPlayer.age)//, this.mysteryPlayer.conference, this.mysteryPlayer.division, this.mysteryPlayer.team, this.mysteryPlayer.position, this.mysteryPlayer.age)
