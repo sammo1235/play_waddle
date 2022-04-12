@@ -5,11 +5,18 @@
 
   <div class="header">
     <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto;">
-      <h3 style="margin-left: auto; cursor: pointer;" @click="showAboutModal()">About</h3>
-      <h3 style="margin-left: 2rem; cursor: pointer;" @click="showStatsModal()">Stats</h3>
-      <h3 style="margin-left: 2rem; cursor: pointer;" @click="showHowTo()">How To Play</h3>
+      <div style="display: flex; align-items: center; margin-left: auto; cursor: pointer;">
+        <h3 style="" @click="showAboutModal()">About</h3>
+      </div>
+      <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
+        <h3 style="" @click="showStatsModal()">Stats</h3>
+        <svg style="margin-left: 6px; margin-top: auto; margin-bottom: auto; color: #2c3e50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7"/><path d="M15 7h6v6"/></svg>
+      </div>
+      <div style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
+        <h3 style="" @click="showHowTo()">How To Play</h3>
+      </div>
       <h3 style="margin-right: auto; margin-left: 2rem; cursor: pointer;">
-        <a href="https://twitter.com/intent/tweet?screen_name=playwaddle&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false"></a>
+        <a href="https://twitter.com/intent/tweet?text=Play%20WADDLE&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false"></a>
       </h3>
     </div>
   </div>
@@ -34,6 +41,8 @@
     <p>Offense: QB, RB, WR, TE, K</p>
     <p>Defense: DL, LB, DB</p>
     <p>A special shout out to <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a>, who put down the first idea lego.</p>
+    <p>Enjoy! 👊</p>
+    <a href="https://docs.google.com/document/d/10QWWaZ9N590j0_J2_FIdfdIX5pQO4Wmskud4_C5bk3w/edit?usp=sharing">Privacy Policy</a>
     <button @click="showAboutModal()" class="button-43" role="button">Close</button>
   </div>
 
@@ -186,7 +195,7 @@ export default {
   color: #2c3e50;
 }
 h3 {
-  font-size: 14px;
+  font-size: 12px;
 }
 @media only screen and (min-width: 600px) {
   h3 {
@@ -196,6 +205,22 @@ h3 {
 @media only screen and (min-width: 1000px) {
   h3 {
     font-size: 20px;
+  }
+}
+svg {
+  width: 16px;
+  height: 16px;
+}
+@media only screen and (min-width: 600px) {
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media only screen and (min-width: 1000px) {
+  svg {
+    width: 25px;
+    height: 25px;
   }
 }
 .modal-backdrop {

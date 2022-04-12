@@ -51,11 +51,11 @@
     <div v-if="this.mysteryPlayer" style="margin-top: 7rem; margin-bottom: 8rem;">
       <div :class="[this.turnsLeft > 6 ? 'hide' : 'wrapper']" style="row-gap: 20px;">
         <div class="title-cell"></div>
-        <div class="title-cell">Conference</div>
-        <div class="title-cell">Division</div>
-        <div class="title-cell">Team</div>
-        <div class="title-cell">Position</div>
-        <div class="title-cell">Age</div>
+        <div class="title-cell">CONF</div>
+        <div class="title-cell">DIV</div>
+        <div class="title-cell">TEAM</div>
+        <div class="title-cell">POS</div>
+        <div class="title-cell">AGE</div>
       </div>
       <div class="wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
         <div class="cell cell-border name cell-border-top cell-spin-1">{{ guess.full_name }}</div>
@@ -67,7 +67,7 @@
           <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/teams/' + guess.team + '.png')" />
         </div>
         <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.position }}</div>
-        <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']" style="flex-direction: row">
+        <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border-top cell-spin-5']" style="flex-direction: row">
           {{ guess.age }}
           <svg v-if="guess.age > this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
@@ -170,13 +170,13 @@ export default {
           $this.showLost = false
         }
 
-      let timeNow = moment()
       let eventTime = moment().endOf('day')
-      let timeDiff = moment.utc(eventTime.diff(timeNow)).format("hh:mm:ss")
-  
+      const timeLeft = moment.utc(eventTime.diff(moment())); // get difference between now and timestamp
+      const formatted = timeLeft.format('HH:mm:ss'); // make pretty
+
       let el = document.getElementById("nextPlayerTime")
       if (el) {
-        el.innerHTML = timeDiff
+        el.innerHTML = formatted
       }
     }, 1000)
   },
@@ -287,11 +287,11 @@ export default {
     },
     ageClose(ageGuess) {
       let closeArray = []
-      let cAge = this.mysteryPlayer.age
+      let cAge = Number(this.mysteryPlayer.age)
       for (let i = cAge - 2; i <= cAge + 2; i++) {
         closeArray.push(i)
       }
-      return closeArray.includes(ageGuess)
+      return closeArray.includes(Number(ageGuess))
     },
     closeShowWon() {
       this.showWon = false
@@ -514,7 +514,7 @@ a {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-  grid-auto-rows: minmax(50px, auto);
+  grid-auto-rows: minmax(55px, auto);
 }
 @media only screen and (min-width: 600px) {
   .wrapper {
@@ -551,11 +551,11 @@ a {
   justify-content: center;
   padding-inline: 1.5rem;
   padding: 1rem;
-  font-size: 14px;
+  font-size: 12px;
 }
 @media only screen and (min-width: 600px) {
   .cell {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 @media only screen and (min-width: 1000px) {
