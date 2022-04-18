@@ -2,15 +2,15 @@
   <div v-if="showWon && this.mysteryPlayer" class="modal">
     <p style="font-size: 35px; margin: 2px">Well done!</p>
     <p>You guessed the mystery player in {{ 7 - this.turnsLeft }} {{ (7 - this.turnsLeft) > 1 ? 'turns' : 'turn' }}.</p>
-    <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.full_name }}</p>
-    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " :src="getImageSrc()" />
+    <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.Player }}</p>
+    <img style="object-fit: cover; max-height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " :src="getImageSrc()" alt="" />
 
     <div id="gameResults" class="mini-wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
-      <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
-      <div :class="[divisionCorrect(guess.division) ? 'correct' : divisionClose(guess.division) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-4']"></div>
-      <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']"></div>
-      <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']"></div>
-      <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']"></div>
+      <div :class="[conferenceCorrect(guess.CONF) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']"></div>
+      <div :class="[divisionCorrect(guess.DIV) ? 'correct' : divisionClose(guess.DIV) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-4']"></div>
+      <div :class="[teamCorrect(guess.TEAM) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']"></div>
+      <div :class="[positionCorrect(guess.POS) ? 'correct' : positionClose(guess.POS) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']"></div>
+      <div :class="[ageCorrect(guess.AGE) ? 'correct' : ageClose(guess.AGE) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-5']"></div>
     </div>
     <div id="gameResultsShared" v-for="guess in guesses" v-bind:key="guess.id">
     </div>
@@ -24,11 +24,11 @@
     </div>
   </div>
 
-  <div v-if="showLost" class="modal">
+  <div v-if="showLost && this.mysteryPlayer" class="modal">
     <p style="font-size: 20px">Better luck next time!</p>
     <p>The mystery player was:</p>
-    <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.full_name }}</p>
-    <img style="object-fit: cover; height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " v-bind:src="require('../assets/players/' + this.mysteryPlayer.full_name.replaceAll(' ', '_') + '.webp')" />
+    <p style="font-size: 20px; font-weight: bold">{{ this.mysteryPlayer.Player }}</p>
+    <img style="object-fit: cover; max-height: 150px; margin-left: auto; margin-right: auto; margin-bottom: 10px; " :src="getImageSrc()" alt="" />
 
 
     <div style="margin-top: 1rem">Next Player in:</div>
@@ -44,7 +44,7 @@
     <div class="search">
       <input type="text" class="search-input" v-model="search" placeholder="Guess a player" :disabled="gameFinished || showWon || showLost || showHowToPlay" />
       <ul style="display: flex; flex-direction: column; border: 1px solid lightblue">
-        <li class="search-result" v-for="player in filteredPlayers" v-bind:key="player.id" @click="guessPlayer(player.full_name)">{{ player.full_name}}</li>
+        <li class="search-result" v-for="player in filteredPlayers" v-bind:key="player.id" @click="guessPlayer(player.Player)">{{ player.Player}}</li>
       </ul>
     </div>
 
@@ -58,21 +58,21 @@
         <div class="title-cell">AGE</div>
       </div>
       <div class="wrapper" style="row-gap: 20px;" v-for="guess in guesses" v-bind:key="guess.id">
-        <div class="cell cell-border name cell-border-top cell-spin-1">{{ guess.full_name }}</div>
-        <div :class="[conferenceCorrect(guess.conference) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']">
-          <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/conferences/' + guess.conference + '.png')" />
+        <div class="cell cell-border name cell-border-top cell-spin-1">{{ guess.Player }}</div>
+        <div :class="[conferenceCorrect(guess.CONF) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-2']">
+          <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/conferences/' + guess.CONF + '.png')" />
         </div>
-        <div :class="[divisionCorrect(guess.division) ? 'correct' : divisionClose(guess.division) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-4']">{{ guess.division }}</div>
-        <div :class="[teamCorrect(guess.team) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']">
-          <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/teams/' + guess.team + '.png')" />
+        <div :class="[divisionCorrect(guess.DIV) ? 'correct' : divisionClose(guess.DIV) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-4']">{{ guess.DIV }}</div>
+        <div :class="[teamCorrect(guess.TEAM) ? 'correct' : 'incorrect', 'cell cell-border cell-border-top cell-spin-6']">
+          <img style="height: 50px; width: 50px;" v-bind:src="require('../assets/teams/' + guess.TEAM + '.png')" />
         </div>
-        <div :class="[positionCorrect(guess.position) ? 'correct' : positionClose(guess.position) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.position }}</div>
-        <div :class="[ageCorrect(guess.age) ? 'correct' : ageClose(guess.age) ? 'close' : 'incorrect', 'cell cell-border-top cell-spin-5']" style="flex-direction: row">
-          {{ guess.age }}
-          <svg v-if="guess.age > this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <div :class="[positionCorrect(guess.POS) ? 'correct' : positionClose(guess.POS) ? 'close' : 'incorrect', 'cell cell-border cell-border-top cell-spin-3']">{{ guess.POS }}</div>
+        <div :class="[ageCorrect(guess.AGE) ? 'correct' : ageClose(guess.AGE) ? 'close' : 'incorrect', 'cell cell-border-top cell-spin-5']" style="flex-direction: row">
+          {{ guess.AGE }}
+          <svg v-if="guess.AGE > this.mysteryPlayer.AGE" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
           </svg>
-          <svg v-if="guess.age < this.mysteryPlayer.age" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg v-if="guess.AGE < this.mysteryPlayer.AGE" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" style="height: 25px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
           </svg>
         </div>
@@ -107,7 +107,7 @@ export default {
   created() {
     // this.playerDatabase = playerDatabaseFile
 
-    const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQeQRhkjJqtjY4fBJLYh5iXCdPY_0jCRhYk3xY2nIUla7Fu1b7kj6AOBybf_t_UM8gLHMgtdY6YMfwP/pub?gid=1231767422&single=true&output=csv", {
+    const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSMafIqm19l3N4iPsEcT5qNJpjOoiYoSGB-QqA8MCLji9wVrQws26vDQeH7pUkKRA/pub?gid=679947948&single=true&output=csv", {
       method: 'get',
       headers: {
         'content-type': 'text/csv;charset=UTF-8'
@@ -139,7 +139,7 @@ export default {
         // console.log(player_index)
         $this.mysteryPlayer = $this.playerDatabase[player_index]
     
-        // console.log("mysteryPlayer: ", $this.mysteryPlayer.full_name, $this.mysteryPlayer.age)//, this.mysteryPlayer.conference, this.mysteryPlayer.division, this.mysteryPlayer.team, this.mysteryPlayer.position, this.mysteryPlayer.age)
+        // console.log("mysteryPlayer: ", $this.mysteryPlayer.Player, $this.mysteryPlayer.AGE, $this.mysteryPlayer.image)//, this.mysteryPlayer.CONF, this.mysteryPlayer.DIV, this.mysteryPlayer.TEAM, this.mysteryPlayer.POS, this.mysteryPlayer.AGE)
       } else {
         setTimeout(waitForDatabase, 150)
       }
@@ -205,7 +205,7 @@ export default {
 
       function replaceDiacritics(text) { return text .split('') .map(l => Object.keys(diacritics).find(k => diacritics[k].includes(l)) || l) .join(''); }
       let players = this.playerDatabase.filter(player => {
-        return replaceDiacritics(player.full_name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")).includes(this.search.toLowerCase())
+        return replaceDiacritics(player.Player.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")).includes(this.search.toLowerCase())
       })
 
       return players.slice(0, 5)
@@ -240,13 +240,13 @@ export default {
     },
     guessPlayer(guessedName) {
       let player = this.playerDatabase.find(player => 
-        player.full_name.toLowerCase() == guessedName.toLowerCase()
+        player.Player.toLowerCase() == guessedName.toLowerCase()
       )
       this.guesses.push(player)
       this.$store.commit('addGuess', player)
       this.search = ''
       this.turnsLeft -= 1
-      if (player.full_name == this.mysteryPlayer.full_name) {
+      if (player.Player == this.mysteryPlayer.Player) {
         const $this = this;
         setTimeout(function() {
           $this.showWon = true
@@ -259,24 +259,24 @@ export default {
       }
     },
     conferenceCorrect(conferenceGuess) {
-      return conferenceGuess == this.mysteryPlayer.conference
+      return conferenceGuess == this.mysteryPlayer.CONF
     },
     divisionCorrect(divisionGuess) {
-      return divisionGuess == this.mysteryPlayer.division
+      return divisionGuess == this.mysteryPlayer.DIV
     },
     divisionClose(divisionGuess) {
-      return this.mysteryPlayer.conference == divisionGuess.split(" ")[0]
+      return this.mysteryPlayer.CONF == divisionGuess.split(" ")[0]
     },
     teamCorrect(teamGuess) {
-      return teamGuess == this.mysteryPlayer.team
+      return teamGuess == this.mysteryPlayer.TEAM
     },
     positionCorrect(positionGuess) {
-      return positionGuess == this.mysteryPlayer.position
+      return positionGuess == this.mysteryPlayer.POS
     },
     positionClose(positionGuess) {
       let offense = ["WR", "RB", "TE", "QB", "K"]
       let defense = ["LB", "DL", "DB"]
-      let position = this.mysteryPlayer.position
+      let position = this.mysteryPlayer.POS
       if(offense.includes(position)) {
         return offense.includes(positionGuess)
       } else if (defense.includes(position)) {
@@ -284,11 +284,11 @@ export default {
       }
     },
     ageCorrect(ageGuess) {
-      return ageGuess == this.mysteryPlayer.age
+      return ageGuess == this.mysteryPlayer.AGE
     },
     ageClose(ageGuess) {
       let closeArray = []
-      let cAge = Number(this.mysteryPlayer.age)
+      let cAge = Number(this.mysteryPlayer.AGE)
       for (let i = cAge - 2; i <= cAge + 2; i++) {
         closeArray.push(i)
       }
@@ -310,33 +310,33 @@ export default {
       var guesses = this.guesses
       // let results = document.getElementById("gameResults")
       for(var i = 0; i<this.guesses.length; i++) {
-        if (this.conferenceCorrect(guesses[i].conference)) {
+        if (this.conferenceCorrect(guesses[i].CONF)) {
           str += "🟩" 
         } else {
           str += "⬜"
         }
-        if (this.divisionCorrect(guesses[i].division)) {
+        if (this.divisionCorrect(guesses[i].DIV)) {
           str += "🟩" 
-        } else if (this.divisionClose(guesses[i].division)) {
+        } else if (this.divisionClose(guesses[i].DIV)) {
           str += "🟨"
         } else {
           str += "⬜"
         }
-        if (this.teamCorrect(guesses[i].team)) {
+        if (this.teamCorrect(guesses[i].TEAM)) {
           str += "🟩"
         } else {
           str += "⬜"
         }
-        if (this.positionCorrect(guesses[i].position)) {
+        if (this.positionCorrect(guesses[i].POS)) {
           str += "🟩"
-        } else if (this.positionClose(guesses[i].position)) {
+        } else if (this.positionClose(guesses[i].POS)) {
           str += "🟨"
         } else {
           str += "⬜"
         }
-        if (this.ageCorrect(guesses[i].age)) {
+        if (this.ageCorrect(guesses[i].AGE)) {
           str += "🟩"
-        } else if (this.ageClose(guesses[i].age)) {
+        } else if (this.ageClose(guesses[i].AGE)) {
           str += "🟨"
         } else {
           str += "⬜"

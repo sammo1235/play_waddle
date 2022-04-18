@@ -6,19 +6,21 @@
   <div class="header">
     <div style="flex-direction: row; display: flex; margin-right: auto; margin-left: auto; padding: 1rem;">
       <div @click="showAboutModal()" style="display: flex; align-items: center; margin-left: auto; cursor: pointer;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
       </div>
       <div @click="showStatsModal()" style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
         <svg style="margin-left: 6px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7"/><path d="M15 7h6v6"/></svg>
       </div>
       <div @click="showHowTo()" style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
       </div>
       <div @click="showSupportModal()" style="display: flex; align-items: center; margin-left: 2rem; cursor: pointer;">
         <svg style="margin-left: 6px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
       </div>
       <div style="display: flex; align-items: center; margin-left: 2rem; margin-right: auto; cursor: pointer;">
-          <a href="https://twitter.com/intent/tweet?text=Play%20WADDLE&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false"></a>
+          <a target="_blank" href="https://twitter.com/playwaddle" style="align-items: center">
+            <img style="height: 38px; margin-top: 4px" v-bind:src="require('./assets/twitter.png')" />
+          </a>
       </div>
     </div>
   </div>
@@ -36,23 +38,23 @@
   </div>
 
   <div v-if="showAbout" class="modal">
-    <p style="font-size: 25px">About WADDLE:</p>
+    <p style="font-size: 25px">About Waddle:</p>
     <p>Each mystery player is semi-randomly picked from the top fantasy football players (including IDPs).</p>
     <p>Much love and all relevant rights to everyone featured.</p>
     <p>The player pool includes the following positions:</p>
     <p>Offense: QB, RB, WR, TE, K</p>
     <p>Defense: DL, LB, DB</p>
-    <p>A special shout out to <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a>, who put down the first idea lego.</p>
+    <p>A special shout out to <a target="_blank" href="https://www.nytimes.com/games/wordle/index.html">Wordle</a>, who put down the first idea lego.</p>
     <p>Enjoy! 👊</p>
-    <a href="https://docs.google.com/document/d/10QWWaZ9N590j0_J2_FIdfdIX5pQO4Wmskud4_C5bk3w/edit?usp=sharing">Privacy Policy</a>
+    <a target="_blank" href="https://docs.google.com/document/d/10QWWaZ9N590j0_J2_FIdfdIX5pQO4Wmskud4_C5bk3w/edit?usp=sharing">Privacy Policy</a>
     <button @click="showAboutModal()" class="button-43" role="button">Close</button>
   </div>
 
   <div v-if="showSupport" class="modal">
     <p style="font-size: 25px">Support</p>
     <p>If you've enjoyed playing Waddle, please consider supporting the
-    <a href="https://donate.redcrossredcrescent.org/ua/donate/~my-donation">Ukranian Red Cross</a>
-    , any amount will help and they could use the support right now. Thank you 🙏</p>
+    <a target="_blank" href="https://donate.redcrossredcrescent.org/ua/donate/~my-donation">Ukranian Red Cross</a>
+    . Any amount will help and they could use the support right now. Thank you! 🙏</p>
     <button @click="showSupportModal()" class="button-43" role="button">Close</button>
   </div>
 
