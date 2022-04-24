@@ -46,7 +46,7 @@
     <p>Defense: DL, LB, DB</p>
     <p>A special shout out to <a target="_blank" href="https://www.nytimes.com/games/wordle/index.html">Wordle</a>, who put down the first idea lego.</p>
     <p>Enjoy! 👊</p>
-    <a target="_blank" href="https://docs.google.com/document/d/10QWWaZ9N590j0_J2_FIdfdIX5pQO4Wmskud4_C5bk3w/edit?usp=sharing">Privacy Policy</a>
+    <a @click="showPrivacyPolicyModal()" style="cursor: pointer; text-decoration: underline;">Privacy Policy</a>
     <button @click="showAboutModal()" class="button-43" role="button">Close</button>
   </div>
 
@@ -102,16 +102,22 @@
   </div>
 
   <div :class="[showHowToPlay || showStats ? 'modal-backdrop' : null, 'hello']">
-    <Game :show-how-to-play="this.showHowToPlay || this.showStats || this.showAbout || this.showSupport" />
+    <Game v-if="shouldShowGame()" :show-how-to-play="this.showHowToPlay || this.showStats || this.showAbout || this.showSupport" />
+    <PrivacyPolicy v-if="showPrivacyPolicy" @returnToGame="showPrivacyPolicyModal()" @termsClicked="showTermsOfUseModal()" />
+    <TermsAndConditions v-if="showTermsOfUse" @returnToGame="showTermsOfUseModal()" @privacyPolicyClicked="showPrivacyPolicyModal()" />
   </div>
 </template>
 
 <script>
 import Game from './components/Game.vue'
+import PrivacyPolicy from './components/PrivacyPolicy.vue'
+import TermsAndConditions from './components/TermsAndConditions.vue'
 export default {
   name: 'App',
   components: {
-    Game
+    Game,
+    PrivacyPolicy,
+    TermsAndConditions
   },
   data() {
     return {
@@ -119,6 +125,8 @@ export default {
       showStats: false,
       showAbout: false,
       showSupport: false,
+      showPrivacyPolicy: false,
+      showTermsOfUse: false
     }
   },
   created() {
@@ -152,29 +160,43 @@ export default {
     }
   },
   methods: {
+    closeAllModals(exceptCurrent) {
+      if (exceptCurrent != "stats") this.showStats = false;
+      if (exceptCurrent != "about") this.showAbout = false;
+      if (exceptCurrent != "support") this.showSupport = false;
+      if (exceptCurrent != "howToPlay") this.showHowToPlay = false;
+      if (exceptCurrent != "privacyPolicy") this.showPrivacyPolicy = false;
+      if (exceptCurrent != "termsOfUse") this.showTermsOfUse = false;
+    },
     showHowTo() {
-      this.showStats = false;
-      this.showAbout = false;
-      this.showSupport = false;
+      this.closeAllModals("howToPlay");
       this.showHowToPlay = !this.showHowToPlay
     },
     showStatsModal() {
-      this.showHowToPlay = false
-      this.showAbout = false;
-      this.showSupport = false;
+      this.closeAllModals("stats");
       this.showStats = !this.showStats
     },
     showAboutModal() {
-      this.showStats = false;
-      this.showHowToPlay = false;
-      this.showSupport = false;
+      this.closeAllModals("about");
       this.showAbout = !this.showAbout
     },
     showSupportModal() {
-      this.showStats = false;
-      this.showHowToPlay = false;
-      this.showAbout = false;
+      this.closeAllModals("support");
       this.showSupport = !this.showSupport
+    },
+    showPrivacyPolicyModal() {
+      this.closeAllModals("privacyPolicy");
+      this.showPrivacyPolicy = !this.showPrivacyPolicy
+    },
+    showTermsOfUseModal() {
+      this.closeAllModals("termsOfUse");
+      this.showTermsOfUse = !this.showTermsOfUse
+    },
+    shouldShowGame() {
+      if (this.showPrivacyPolicy || this.showTermsOfUse) {
+        return false 
+      }
+      return true
     },
     guessedIn(turnsTaken) {
       let results = this.$store.getters.getResultsHistory   
