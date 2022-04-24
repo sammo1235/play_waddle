@@ -526,7 +526,7 @@ a {
 @media only screen and (min-width: 1000px) {
   .wrapper {
     margin: auto;
-    width: 50%;
+    width: 60%;
   }
 }
 
