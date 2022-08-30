@@ -107,7 +107,7 @@ export default {
   created() {
     // this.playerDatabase = playerDatabaseFile
 
-    const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSMafIqm19l3N4iPsEcT5qNJpjOoiYoSGB-QqA8MCLji9wVrQws26vDQeH7pUkKRA/pub?gid=679947948&single=true&output=csv", {
+    const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSu63wW64Ku7O7A36x9Sr8TWBdpAsdsKAWBoaiK7ndsrCkHerxIIcyuiKemsjyIlQ/pub?gid=1468918379&single=true&output=csv", {
       method: 'get',
       headers: {
         'content-type': 'text/csv;charset=UTF-8'
