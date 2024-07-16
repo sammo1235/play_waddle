@@ -82,7 +82,6 @@
 </template>
 
 <script>
-// import playerDatabaseFile from "../assets/nfl_players.csv"
 import moment from 'moment'
 
 export default {
@@ -105,8 +104,6 @@ export default {
     }
   },
   created() {
-    // this.playerDatabase = playerDatabaseFile
-
     const response = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSu63wW64Ku7O7A36x9Sr8TWBdpAsdsKAWBoaiK7ndsrCkHerxIIcyuiKemsjyIlQ/pub?gid=1468918379&single=true&output=csv", {
       method: 'get',
       headers: {
@@ -120,14 +117,12 @@ export default {
     const getPlayerDatabase = () => {
       response.then((response) => {
         window.data = response;
-        // console.log(response)
         this.playerDatabase = response
       })
     }
     
     getPlayerDatabase()
 
-    // window.data = players
     const $this = this;
 
     // new player per day
@@ -136,10 +131,8 @@ export default {
         const ms_per_day = 24 * 60 * 60 * 1000
         let days_since_epoch = Math.floor((new Date()).getTime() / ms_per_day)
         let player_index = days_since_epoch % $this.playerDatabase.length
-        // console.log(player_index)
         $this.mysteryPlayer = $this.playerDatabase[player_index]
     
-        // console.log("mysteryPlayer: ", $this.mysteryPlayer.Player, $this.mysteryPlayer.AGE, $this.mysteryPlayer.image)//, this.mysteryPlayer.CONF, this.mysteryPlayer.DIV, this.mysteryPlayer.TEAM, this.mysteryPlayer.POS, this.mysteryPlayer.AGE)
       } else {
         setTimeout(waitForDatabase, 150)
       }
